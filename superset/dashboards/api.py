@@ -1018,6 +1018,11 @@ class DashboardRestApi(CustomTagsOptimizationMixin, BaseSupersetModelRestApi):
               type: integer
             name: pk
           - in: query
+            name: dry_run
+            schema:
+              type: boolean
+              description: If true, validate the request without persisting changes
+          - in: query
             name: mark_updated
             schema:
               type: boolean

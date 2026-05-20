@@ -19217,6 +19217,14 @@
           },
           {
             "in": "query",
+            "name": "dry_run",
+            "schema": {
+              "description": "If true, validate the request without persisting changes",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
             "name": "mark_updated",
             "schema": {
               "description": "Whether to update the dashboard changed_on field",
