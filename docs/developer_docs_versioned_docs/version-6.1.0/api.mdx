@@ -123,7 +123,7 @@ curl -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
 </details>
 
 <details>
-<summary><strong>Datasets</strong> (19 endpoints) — Manage datasets (tables) used for building charts.</summary>
+<summary><strong>Datasets</strong> (20 endpoints) — Manage datasets (tables) used for building charts.</summary>
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
@@ -136,6 +136,7 @@ curl -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
 | `DELETE` | [Delete a dataset](/developer-docs/api/delete-a-dataset) | `/api/v1/dataset/{pk}` |
 | `PUT` | [Update a dataset](/developer-docs/api/update-a-dataset) | `/api/v1/dataset/{pk}` |
 | `DELETE` | [Delete a dataset column](/developer-docs/api/delete-a-dataset-column) | `/api/v1/dataset/{pk}/column/{column_id}` |
+| `POST` | Detect datetime formats for dataset columns | `/api/v1/dataset/{pk}/detect_datetime_formats` |
 | `GET` | [Get dataset drill info](/developer-docs/api/get-dataset-drill-info) | `/api/v1/dataset/{pk}/drill_info/` |
 | `DELETE` | [Delete a dataset metric](/developer-docs/api/delete-a-dataset-metric) | `/api/v1/dataset/{pk}/metric/{metric_id}` |
 | `PUT` | [Refresh and update columns of a dataset](/developer-docs/api/refresh-and-update-columns-of-a-dataset) | `/api/v1/dataset/{pk}/refresh` |
@@ -239,10 +240,11 @@ curl -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
 </details>
 
 <details>
-<summary><strong>Datasources</strong> (2 endpoints) — Query datasource metadata and column values.</summary>
+<summary><strong>Datasources</strong> (3 endpoints) — Query datasource metadata and column values.</summary>
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
+| `GET` | List datasets and semantic views combined | `/api/v1/datasource/` |
 | `GET` | [Get possible values for a datasource column](/developer-docs/api/get-possible-values-for-a-datasource-column) | `/api/v1/datasource/{datasource_type}/{datasource_id}/column/{column_name}/values/` |
 | `POST` | [Validate a SQL expression against a datasource](/developer-docs/api/validate-a-sql-expression-against-a-datasource) | `/api/v1/datasource/{datasource_type}/{datasource_id}/validate_expression/` |
 
@@ -255,6 +257,37 @@ curl -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
 |--------|----------|-------------|
 | `GET` | [Return an AdvancedDataTypeResponse](/developer-docs/api/return-an-advanced-data-type-response) | `/api/v1/advanced_data_type/convert` |
 | `GET` | [Return a list of available advanced data types](/developer-docs/api/return-a-list-of-available-advanced-data-types) | `/api/v1/advanced_data_type/types` |
+
+</details>
+
+#### Semantic Layers (Feature Flag: SEMANTIC_LAYERS)
+
+<details>
+<summary><strong>Semantic Layers</strong> (8 endpoints) — Manage semantic layer connections and configurations.</summary>
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | List available semantic layer types | `/api/v1/semantic_layer/types` |
+| `POST` | Get configuration schema for a semantic layer type | `/api/v1/semantic_layer/schema/configuration` |
+| `POST` | Get runtime schema for a semantic layer | `/api/v1/semantic_layer/{uuid}/schema/runtime` |
+| `POST` | List available views from a semantic layer | `/api/v1/semantic_layer/{uuid}/views` |
+| `POST` | Create a semantic layer | `/api/v1/semantic_layer/` |
+| `PUT` | Update a semantic layer | `/api/v1/semantic_layer/{uuid}` |
+| `DELETE` | Delete a semantic layer | `/api/v1/semantic_layer/{uuid}` |
+| `GET` | List databases and semantic layers combined | `/api/v1/semantic_layer/connections/` |
+
+</details>
+
+<details>
+<summary><strong>Semantic Views</strong> (5 endpoints) — Manage semantic views within semantic layers.</summary>
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | Get semantic view structure (dimensions and metrics) | `/api/v1/semantic_view/{pk}/structure` |
+| `POST` | Bulk create semantic views | `/api/v1/semantic_view/` |
+| `PUT` | Update a semantic view | `/api/v1/semantic_view/{pk}` |
+| `DELETE` | Delete a semantic view | `/api/v1/semantic_view/{pk}` |
+| `DELETE` | Bulk delete semantic views | `/api/v1/semantic_view/` |
 
 </details>
 
@@ -527,6 +560,32 @@ curl -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
 | `POST` | [Create log](/developer-docs/api/create-log) | `/api/v1/log/` |
 | `GET` | [Get a log detail information](/developer-docs/api/get-a-log-detail-information) | `/api/v1/log/{pk}` |
 | `GET` | [Get recent activity data for a user](/developer-docs/api/get-recent-activity-data-for-a-user) | `/api/v1/log/recent_activity/` |
+
+</details>
+
+#### Tasks & Extensions
+
+<details>
+<summary><strong>Tasks</strong> (4 endpoints) — Monitor and manage background tasks.</summary>
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | Get a task | `/api/v1/task/{task_uuid}` |
+| `GET` | Get task status (lightweight for polling) | `/api/v1/task/{task_uuid}/status` |
+| `POST` | Cancel a task | `/api/v1/task/{task_uuid}/cancel` |
+| `GET` | Get related subscribers | `/api/v1/task/related/subscribers` |
+
+</details>
+
+<details>
+<summary><strong>Extensions</strong> (4 endpoints) — List and retrieve frontend extensions.</summary>
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | List all enabled extensions | `/api/v1/extensions/` |
+| `GET` | Get API info | `/api/v1/extensions/_info` |
+| `GET` | Get an extension by its publisher and name | `/api/v1/extensions/{publisher}/{name}` |
+| `GET` | Get a frontend chunk of an extension | `/api/v1/extensions/{publisher}/{name}/{file}` |
 
 </details>
 
