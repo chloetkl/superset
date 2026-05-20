@@ -17,9 +17,9 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-> **Note: This repo is a fork of Apache Superset used to test [autodocs](https://devin-autodocs.onrender.com/dashboard), a documentation drift remediation tool.**
+> **Note: This repo is a fork of Apache Superset used to test [AutoDocs](https://devin-autodocs.onrender.com/dashboard), a documentation drift remediation tool.**
 >
-> An API documentation inconsistency was intentionally introduced in [PR #14](https://github.com/chloetkl/superset/pull/14), and a PR to merge updates from the apache/superset repository into this forked repository in [PR #16](https://github.com/chloetkl/superset/pull/16). See the [autodocs dashboard](https://devin-autodocs.onrender.com/dashboard) to view how the drift was identified and remediated.
+> An API documentation inconsistency was intentionally introduced in [PR #14](https://github.com/chloetkl/superset/pull/14), and a PR to merge updates from the apache/superset repository into this forked repository in [PR #16](https://github.com/chloetkl/superset/pull/16). See the [AutoDocs dashboard](https://devin-autodocs.onrender.com/dashboard) to view how the drift was identified and remediated.
 
 # Superset
 
