@@ -588,6 +588,60 @@ curl -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
 
 </details>
 
+#### Feature-Flagged APIs
+
+> The following API groups require specific [feature flags](https://superset.apache.org/docs/configuration/configuring-superset#feature-flags) to be enabled.
+
+<details>
+<summary><strong>Semantic Layers</strong> (15 endpoints) — Manage semantic layers and semantic views. <em>Requires <code>SEMANTIC_LAYERS</code> feature flag.</em></summary>
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | List all semantic layers | `/api/v1/semantic_layer/` |
+| `GET` | Get a semantic layer by UUID | `/api/v1/semantic_layer/{uuid}` |
+| `POST` | Create a semantic layer | `/api/v1/semantic_layer/` |
+| `PUT` | Update a semantic layer | `/api/v1/semantic_layer/{uuid}` |
+| `DELETE` | Delete a semantic layer | `/api/v1/semantic_layer/{uuid}` |
+| `GET` | List available semantic layer types | `/api/v1/semantic_layer/types` |
+| `POST` | Get configuration schema for a semantic layer type | `/api/v1/semantic_layer/schema/configuration` |
+| `POST` | Get runtime schema for a semantic layer | `/api/v1/semantic_layer/{uuid}/schema/runtime` |
+| `POST` | List available views from a semantic layer | `/api/v1/semantic_layer/{uuid}/views` |
+| `GET` | List databases and semantic layers combined | `/api/v1/semantic_layer/connections/` |
+| `GET` | Get semantic view structure (dimensions and metrics) | `/api/v1/semantic_view/{pk}/structure` |
+| `POST` | Create semantic views | `/api/v1/semantic_view/` |
+| `PUT` | Update a semantic view | `/api/v1/semantic_view/{pk}` |
+| `DELETE` | Delete a semantic view | `/api/v1/semantic_view/{pk}` |
+| `DELETE` | Bulk delete semantic views | `/api/v1/semantic_view/` |
+
+</details>
+
+<details>
+<summary><strong>Tasks</strong> (7 endpoints) — View and manage background tasks. <em>Requires <code>GLOBAL_TASK_FRAMEWORK</code> feature flag.</em></summary>
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | List tasks | `/api/v1/task/` |
+| `GET` | Get API metadata for the task resource | `/api/v1/task/_info` |
+| `GET` | Get a task by UUID | `/api/v1/task/{task_uuid}` |
+| `GET` | Get task status (lightweight for polling) | `/api/v1/task/{task_uuid}/status` |
+| `POST` | Cancel a task | `/api/v1/task/{task_uuid}/cancel` |
+| `GET` | Get related subscribers for task filtering | `/api/v1/task/related/subscribers` |
+| `GET` | Get related field data for tasks | `/api/v1/task/related/{column_name}` |
+
+</details>
+
+<details>
+<summary><strong>Extensions</strong> (4 endpoints) — Manage UI extensions (micro-frontends). <em>Requires <code>ENABLE_EXTENSIONS</code> feature flag.</em></summary>
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | Get API info including permissions | `/api/v1/extensions/_info` |
+| `GET` | List all enabled extensions | `/api/v1/extensions/` |
+| `GET` | Get an extension by publisher and name | `/api/v1/extensions/{publisher}/{name}` |
+| `GET` | Get a frontend chunk of an extension | `/api/v1/extensions/{publisher}/{name}/{file}` |
+
+</details>
+
 #### Other
 
 <details>
