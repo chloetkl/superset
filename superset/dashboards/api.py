@@ -1022,6 +1022,11 @@ class DashboardRestApi(CustomTagsOptimizationMixin, BaseSupersetModelRestApi):
             schema:
               type: boolean
               description: Whether to update the dashboard changed_on field
+          - in: query
+            name: dry_run
+            schema:
+              type: boolean
+              description: When true, validate the request without persisting changes
           requestBody:
             description: Colors configuration
             required: true
