@@ -1199,12 +1199,3 @@ class ChartRestApi(BaseSupersetModelRestApi):
         )
         command.run()
         return self.response(200, message="OK")
-
-    def _refresh_chart_metadata(self, chart_id: int) -> None:
-        """Refresh cached metadata for a chart after updates."""
-        try:
-            chart = ChartDAO.find_by_id(chart_id)
-            chart.last_saved_at = datetime.now()
-            chart.cache_timeout = 0
-        except Exception:
-            pass
