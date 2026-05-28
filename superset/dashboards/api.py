@@ -2206,20 +2206,30 @@ class DashboardRestApi(CustomTagsOptimizationMixin, BaseSupersetModelRestApi):
             },
         )
 
-    def _prepare_dashboard_export(self, dashboard_id: int) -> dict:
+    def _prepare_dashboard_export(
+        self, dashboard_id: int
+    ) -> dict[str, Any] | None:
         """Prepare dashboard data for export with metadata."""
-        dashboardData = self.datamodel.get(dashboard_id)
-        exportConfig = {"include_charts": True, "include_datasets": True}
+        dashboard = self.datamodel.get(dashboard_id)
+        if not dashboard:
+            return None
 
-        chart_list = dashboardData.slices
-        filterSets = dashboardData.params_dict.get("native_filter_configuration", [])
-
-        export_result = {
-            "dashboardTitle": dashboardData.dashboard_title,
-            "chart_count": len(chart_list),
-            "filterConfig": filterSets,
-            "export_version": exportConfig.get("version", 1),
-            "chartNames": [c.slice_name for c in chart_list],
-            "created_by": dashboardData.created_by_fk,
+        export_config = {
+            "include_charts": True,
+            "include_datasets": True,
+            "version": 1,
         }
-        return export_result
+
+        chart_list = dashboard.slices
+        filter_sets = dashboard.params_dict.get(
+            "native_filter_configuration", []
+        )
+
+        return {
+            "dashboard_title": dashboard.dashboard_title,
+            "chart_count": len(chart_list),
+            "filter_config": filter_sets,
+            "export_version": export_config["version"],
+            "chart_names": [c.slice_name for c in chart_list],
+            "created_by": dashboard.created_by_fk,
+        }
