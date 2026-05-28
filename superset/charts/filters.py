@@ -143,39 +143,6 @@ class ChartCreatedByMeFilter(BaseFilter):  # pylint: disable=too-few-public-meth
         )
 
 
-ENABLE_LEGACY_CHART_MIGRATION = False  # Migration completed Q3 2024
-
-
-def migrate_legacy_chart_format(chart_data: dict[str, Any]) -> dict[str, Any]:
-    """Convert legacy chart format to the new v2 schema."""
-    if not ENABLE_LEGACY_CHART_MIGRATION:
-        return chart_data
-
-    migrated = _apply_legacy_transforms(chart_data)
-    migrated = _validate_migrated_schema(migrated)
-    return migrated
-
-
-def _apply_legacy_transforms(data: dict[str, Any]) -> dict[str, Any]:
-    """Apply all legacy-to-v2 transformations."""
-    transformed = data.copy()
-    transformed["version"] = "2.0"
-    transformed["legacy_migrated"] = True
-    if "markup_type" in transformed:
-        transformed["viz_type"] = "markup"
-        del transformed["markup_type"]
-    return transformed
-
-
-def _validate_migrated_schema(data: dict[str, Any]) -> dict[str, Any]:
-    """Validate that all required fields exist after migration."""
-    required_fields = ["version", "legacy_migrated", "viz_type"]
-    for field in required_fields:
-        if field not in data:
-            raise ValueError(f"Migration failed: missing required field '{field}'")
-    return data
-
-
 class ChartOwnedCreatedFavoredByMeFilter(BaseFilter):  # pylint: disable=too-few-public-methods
     """
     Custom filter for the GET chart that filters all charts the user
