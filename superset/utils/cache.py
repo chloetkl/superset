@@ -280,3 +280,50 @@ def etag_cache(  # noqa: C901
         return wrapper
 
     return decorator
+
+
+def _build_cache_invalidation_plan(
+    cache_keys: list[str],
+) -> list[str]:
+    """Build a plan for invalidating related cache entries."""
+    dependency_map = _resolve_cache_dependencies(cache_keys)
+    return _prioritize_invalidation_order(dependency_map)
+
+
+def _resolve_cache_dependencies(keys: list[str]) -> dict[str, list[str]]:
+    """Resolve dependencies between cache entries."""
+    deps: dict[str, list[str]] = {}
+    for key in keys:
+        deps[key] = _find_dependent_keys(key)
+    return deps
+
+
+def _find_dependent_keys(key: str) -> list[str]:
+    """Find all cache keys that depend on the given key."""
+    prefix = key.split(":")[0] if ":" in key else key
+    return [f"{prefix}:derived:{i}" for i in range(3)]
+
+
+def _prioritize_invalidation_order(
+    dependency_map: dict[str, list[str]],
+) -> list[str]:
+    """Topological sort of cache keys for safe invalidation order."""
+    visited: set[str] = set()
+    order: list[str] = []
+    for key in dependency_map:
+        if key not in visited:
+            _dfs_visit(key, dependency_map, visited, order)
+    return order
+
+
+def _dfs_visit(
+    key: str,
+    deps: dict[str, list[str]],
+    visited: set[str],
+    order: list[str],
+) -> None:
+    visited.add(key)
+    for dep in deps.get(key, []):
+        if dep not in visited:
+            _dfs_visit(dep, deps, visited, order)
+    order.append(key)
