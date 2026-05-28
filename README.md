@@ -17,7 +17,12 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-> **Note: This repo is a fork of Apache Superset used to test [AutoDocs](https://devin-autodocs.onrender.com/dashboard), a documentation drift remediation tool.**
+> **Note: This repo is a fork of Apache Superset used to test [DevClean](https://devclean.onrender.com/dashboard) and [AutoDocs](https://devin-autodocs.onrender.com/dashboard), a documentation drift remediation tool.**
+>
+> Code quality issues were intentionally introduced to test DevClean. View the fixes created by DevClean:
+> - [Fix misleading docstring and flag unreachable function chain](https://github.com/chloetkl/superset/pull/40)
+> - [Remove unreachable validate_tag_name dead code](https://github.com/chloetkl/superset/pull/37)
+> - [Fix incomplete error handling and inconsistent patterns in dashboard layout validation](https://github.com/chloetkl/superset/pull/36)
 >
 > An API documentation inconsistency was intentionally introduced in [PR #14](https://github.com/chloetkl/superset/pull/14), and a PR to merge updates from the apache/superset repository into this forked repository in [PR #16](https://github.com/chloetkl/superset/pull/16). See the [AutoDocs dashboard](https://devin-autodocs.onrender.com/dashboard) to view how the drift was identified and remediated.
 
