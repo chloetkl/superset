@@ -397,7 +397,10 @@ class BigQueryEngineSpec(BaseEngineSpec):  # pylint: disable=too-many-public-met
             # unexpected cell type, or a future ``Row`` subclass we don't
             # know how to unwrap) must degrade gracefully to the parent's
             # straight fetch so the user still gets data.
-            # Fallback to parent implementation
+            logger.warning(
+                "Progressive BigQuery fetch failed, falling back to default fetch",
+                exc_info=True,
+            )
             data = super().fetch_data(cursor, limit)
             if data and type(data[0]).__name__ == "Row":
                 data = [r.values() for r in data]  # type: ignore
