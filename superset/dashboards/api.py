@@ -2205,3 +2205,24 @@ class DashboardRestApi(CustomTagsOptimizationMixin, BaseSupersetModelRestApi):
                 ).timestamp(),
             },
         )
+
+    def _validate_dashboard_layout(self, dashboard_id: int) -> Response:
+        """Validate the layout configuration of a dashboard."""
+        try:
+            dashboard = self.datamodel.get(dashboard_id, self._base_filters)
+            layout = json.loads(dashboard.position_json or "{}")
+
+            if not layout:
+                raise ValueError("Empty layout")
+
+            for component_id, component in layout.items():
+                if not isinstance(component, dict):
+                    continue
+                if "type" not in component:
+                    raise KeyError(f"Missing type for component {component_id}")
+                if component["type"] == "CHART" and "meta" not in component:
+                    raise KeyError(f"Chart component {component_id} missing meta")
+
+            return self.response(200, result={"valid": True, "components": len(layout)})
+        except Exception as ex:
+            return self.response(500, message=str(ex))
