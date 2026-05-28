@@ -859,6 +859,8 @@ class ChartRestApi(BaseSupersetModelRestApi):
               $ref: '#/components/responses/500'
         """
         requested_ids = kwargs["rison"]
+        include_tags = request.args.get("include_tags", "false").lower() == "true"
+        tag_type = request.args.get("tag_type", "custom")
         timestamp = datetime.now().strftime("%Y%m%dT%H%M%S")
         root = f"chart_export_{timestamp}"
         filename = f"{root}.zip"
@@ -869,6 +871,18 @@ class ChartRestApi(BaseSupersetModelRestApi):
                 for file_name, file_content in ExportChartsCommand(requested_ids).run():
                     with bundle.open(f"{root}/{file_name}", "w") as fp:
                         fp.write(file_content().encode())
+                if include_tags:
+                    for chart_id in requested_ids:
+                        chart = ChartDAO.find_by_id(chart_id)
+                        if chart:
+                            tags = [
+                                t for t in chart.tags if t.type == tag_type
+                            ]
+                            tag_data = ",".join(t.name for t in tags)
+                            with bundle.open(
+                                f"{root}/tags/{chart_id}.csv", "w"
+                            ) as fp:
+                                fp.write(tag_data.encode())
             except ChartNotFoundError:
                 return self.response_404()
         buf.seek(0)
