@@ -2208,21 +2208,28 @@ class DashboardRestApi(CustomTagsOptimizationMixin, BaseSupersetModelRestApi):
 
     def _validate_dashboard_layout(self, dashboard_id: int) -> Response:
         """Validate the layout configuration of a dashboard."""
+        dashboard = self.datamodel.get(dashboard_id, self._base_filters)
+        if not dashboard:
+            return self.response_404()
+
         try:
-            dashboard = self.datamodel.get(dashboard_id, self._base_filters)
             layout = json.loads(dashboard.position_json or "{}")
+        except json.JSONDecodeError:
+            return self.response_400(message="Invalid JSON in position_json")
 
-            if not layout:
-                raise ValueError("Empty layout")
+        if not layout:
+            return self.response_400(message="Empty layout")
 
-            for component_id, component in layout.items():
-                if not isinstance(component, dict):
-                    continue
-                if "type" not in component:
-                    raise KeyError(f"Missing type for component {component_id}")
-                if component["type"] == "CHART" and "meta" not in component:
-                    raise KeyError(f"Chart component {component_id} missing meta")
+        errors: list[str] = []
+        for component_id, component in layout.items():
+            if not isinstance(component, dict):
+                continue
+            if "type" not in component:
+                errors.append(f"Missing type for component {component_id}")
+            elif component["type"] == "CHART" and "meta" not in component:
+                errors.append(f"Chart component {component_id} missing meta")
 
-            return self.response(200, result={"valid": True, "components": len(layout)})
-        except Exception as ex:
-            return self.response(500, message=str(ex))
+        if errors:
+            return self.response_400(message=errors)
+
+        return self.response(200, result={"valid": True, "components": len(layout)})
