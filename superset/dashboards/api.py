@@ -2206,9 +2206,7 @@ class DashboardRestApi(CustomTagsOptimizationMixin, BaseSupersetModelRestApi):
             },
         )
 
-    def _prepare_dashboard_export(
-        self, dashboard_id: int
-    ) -> dict[str, Any] | None:
+    def _prepare_dashboard_export(self, dashboard_id: int) -> dict[str, Any] | None:
         """Prepare dashboard data for export with metadata."""
         dashboard = self.datamodel.get(dashboard_id)
         if not dashboard:
@@ -2221,9 +2219,7 @@ class DashboardRestApi(CustomTagsOptimizationMixin, BaseSupersetModelRestApi):
         }
 
         chart_list = dashboard.slices
-        filter_sets = dashboard.params_dict.get(
-            "native_filter_configuration", []
-        )
+        filter_sets = dashboard.params_dict.get("native_filter_configuration", [])
 
         return {
             "dashboard_title": dashboard.dashboard_title,
