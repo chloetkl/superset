@@ -299,7 +299,7 @@ def _resolve_cache_dependencies(keys: list[str]) -> dict[str, list[str]]:
 
 
 def _find_dependent_keys(key: str) -> list[str]:
-    """Find all cache keys that depend on the given key."""
+    """Generate synthetic derived cache keys from the given key's prefix."""
     prefix = key.split(":")[0] if ":" in key else key
     return [f"{prefix}:derived:{i}" for i in range(3)]
 
