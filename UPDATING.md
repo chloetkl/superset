@@ -24,6 +24,30 @@ assists people when migrating to a new version.
 
 ## Next
 
+### MCP: `ChartPreview` response schema simplified
+
+The `ChartPreview` response returned by `get_chart_preview` and `update_chart_preview` no longer includes the top-level backward-compatibility fields `format`, `ascii_chart`, `table_data`, `width`, and `height`. Preview content is available exclusively via the typed `content` field (e.g., `content.type` indicates the format). MCP clients that relied on the removed top-level fields should read from `content` instead.
+
+### MCP: `update_chart_preview` — `form_data_key` is optional
+
+`UpdateChartPreviewRequest.form_data_key` changed from required to optional (default `None`). Omit it to create a fresh preview from `config` + `dataset_id` without needing a prior `generate_chart` call.
+
+### MCP: `add_chart_to_existing_dashboard` — strict `target_tab` matching
+
+When `target_tab` is specified but does not match any tab in the dashboard, the tool returns an error listing available tabs instead of silently falling back to the first tab.
+
+### BigQuery: progressive fetch with `BQ_FETCH_MAX_MB`
+
+A new config variable `BQ_FETCH_MAX_MB` (default `200`) limits the in-memory size of BigQuery result sets. When results exceed this limit they are truncated and a `warning` field is included in the `ChartDataResponseResult` response.
+
+### Chart data API: new `warning` field
+
+`ChartDataResponseResult` now includes an optional `warning` string field. It is populated when query results were truncated (e.g., due to BigQuery memory constraints).
+
+### Dashboard import/export: `roles` field
+
+Dashboard exports now include a `roles` list (role names) when DASHBOARD_RBAC roles are assigned. On import, roles are resolved by name; missing roles are skipped with a warning.
+
 ### Granular Export Controls
 
 A new feature flag `GRANULAR_EXPORT_CONTROLS` introduces three fine-grained permissions that replace the legacy `can_csv` permission:

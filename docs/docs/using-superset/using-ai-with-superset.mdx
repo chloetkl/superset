@@ -253,11 +253,11 @@ Ask your admin for the MCP server URL and any authentication tokens you need.
 | `list_charts` | List charts with filtering and search |
 | `get_chart_info` | Get chart metadata and configuration |
 | `get_chart_data` | Retrieve chart data (JSON, CSV, or Excel) |
-| `get_chart_preview` | Generate a chart preview (URL, ASCII, table, or Vega-Lite) |
+| `get_chart_preview` | Generate a chart preview (URL or Vega-Lite spec). Preview content is returned via the structured `content` field |
 | `get_chart_type_schema` | Get the configuration schema for a chart type |
 | `generate_chart` | Create a new chart from a specification (defaults to preview mode — review before saving) |
 | `update_chart` | Modify an existing chart's configuration (pass `generate_preview=False` to persist immediately instead of returning a preview URL) |
-| `update_chart_preview` | Update a cached chart preview without saving |
+| `update_chart_preview` | Update or create a chart preview without saving. `form_data_key` is optional — omit it to create a fresh preview from `config` + `dataset_id` |
 | `generate_explore_link` | Generate an Explore URL for interactive visualization |
 
 ### Dashboards
@@ -267,7 +267,7 @@ Ask your admin for the MCP server URL and any authentication tokens you need.
 | `list_dashboards` | List dashboards with filtering and search |
 | `get_dashboard_info` | Get dashboard metadata and layout |
 | `generate_dashboard` | Create a new dashboard with specified charts |
-| `add_chart_to_existing_dashboard` | Add a chart to an existing dashboard |
+| `add_chart_to_existing_dashboard` | Add a chart to an existing dashboard. Use `target_tab` to place it in a specific tab (by name or component ID); returns an error listing available tabs if the target is not found |
 
 ### SQL
 
@@ -275,7 +275,7 @@ Ask your admin for the MCP server URL and any authentication tokens you need.
 |------|-------------|
 | `execute_sql` | Run a SQL query with RBAC enforcement |
 | `save_sql_query` | Persist a SQL query to SQL Lab's saved queries |
-| `open_sql_lab_with_context` | Open SQL Lab with a pre-populated query |
+| `open_sql_lab_with_context` | Open SQL Lab with a pre-populated query. Accepts an optional `title` (max 256 chars) to label the tab |
 
 ### Databases
 

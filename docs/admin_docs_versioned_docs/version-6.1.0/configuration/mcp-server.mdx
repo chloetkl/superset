@@ -694,6 +694,8 @@ Disabling RBAC removes all permission checks from MCP tool calls. Only do this o
 All MCP tool calls are recorded in Superset's action log. You can view them at **Settings → Action Log** (admin only). Each log entry records:
 
 - The tool name (e.g., `mcp.generate_chart.db_write`)
+- The resolved MCP tool name (`mcp_tool`) when tool search proxies a `call_tool` request to the underlying tool
+- The error type (`error_type`) when a tool call raises an exception
 - The authenticated user
 - A timestamp
 
@@ -705,8 +707,8 @@ Every MCP request passes through a middleware stack before reaching the tool fun
 
 | Middleware | Purpose | Default |
 |------------|---------|---------|
-| `StructuredContentStripperMiddleware` | Strips `structuredContent` from responses for Claude.ai bridge compatibility | Enabled |
-| `LoggingMiddleware` | Logs each tool call with user, parameters, and duration | Enabled |
+| `StructuredContentStripperMiddleware` | Strips `structuredContent` from responses for Claude.ai bridge compatibility. Gracefully returns an empty tool list when inner middleware raises during `tools/list` | Enabled |
+| `LoggingMiddleware` | Logs each tool call with user, parameters, duration, resolved `mcp_tool` name (for `call_tool` proxies), and `error_type` on failures | Enabled |
 | `GlobalErrorHandlerMiddleware` | Catches unhandled exceptions and sanitizes sensitive data before it reaches the client | Enabled |
 | `ResponseSizeGuardMiddleware` | Estimates token count, warns at 80% of limit, blocks at limit | Enabled (configurable via `MCP_RESPONSE_SIZE_CONFIG`) |
 | `ResponseCachingMiddleware` | Caches read-heavy tool responses (in-memory or Redis) | Disabled (enable via `MCP_CACHE_CONFIG`) |
