@@ -1,1 +1,1 @@
-{"parameters":[{"description":"Either the id of the chart, or its uuid","in":"path","name":"id_or_uuid","required":true,"schema":{"type":"string"}}]}
+{"parameters":[{"description":"Either the id of the chart, or its uuid","in":"path","name":"id_or_uuid","required":true,"schema":{"type":"string"}},{"description":"If set to true, bypasses the cache by setting the chart's cache timeout to 0 for this request","in":"query","name":"force_refresh","required":false,"schema":{"type":"boolean"}}]}

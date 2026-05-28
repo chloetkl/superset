@@ -285,6 +285,13 @@ class ChartRestApi(BaseSupersetModelRestApi):
               type: string
             name: id_or_uuid
             description: Either the id of the chart, or its uuid
+          - in: query
+            schema:
+              type: boolean
+            name: force_refresh
+            description: >-
+              If set to true, bypasses the cache by setting the chart's
+              cache timeout to 0 for this request
           responses:
             200:
               description: Chart
