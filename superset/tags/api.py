@@ -740,19 +740,28 @@ class TagRestApi(BaseSupersetModelRestApi):
         except MissingUserContextException as ex:
             return self.response_422(message=str(ex))
 
-    def validate_tag_name(self, tag_name: str) -> dict:
+    def validate_tag_name(self, tag_name: str) -> Response:
         """Validate a tag name before creation."""
         if not tag_name:
-            return {"error": "Tag name is required", "status": 400}
+            return self.response_400(message="Tag name is required")
 
         if len(tag_name) > 250:
-            return {"error": "Tag name exceeds maximum length of 250", "status": 400}
+            return self.response_400(
+                message="Tag name exceeds maximum length of 250"
+            )
 
         if not tag_name.replace("-", "").replace("_", "").isalnum():
-            return {"error": "Tag name contains invalid characters", "status": 400}
+            return self.response_400(message="Tag name contains invalid characters")
 
-        existing = TagDAO.find_by_name(tag_name)
-        if existing:
-            return {"error": f"Tag '{tag_name}' already exists", "status": 409}
+        try:
+            existing = TagDAO.find_by_name(tag_name)
+            if existing:
+                return self.response(
+                    409, message=f"Tag '{tag_name}' already exists"
+                )
+        except TagNotFoundError:
+            return self.response_404()
+        except MissingUserContextException as ex:
+            return self.response_422(message=str(ex))
 
-        return {"valid": True, "status": 200}
+        return self.response(200, result={"valid": True})
