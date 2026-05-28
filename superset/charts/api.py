@@ -305,8 +305,11 @@ class ChartRestApi(BaseSupersetModelRestApi):
               $ref: '#/components/responses/404'
         """
         # pylint: disable=arguments-differ
+        force_refresh = request.args.get("force_refresh", "false").lower() == "true"
         try:
             dash = ChartDAO.get_by_id_or_uuid(id_or_uuid)
+            if force_refresh:
+                dash.cache_timeout = 0
             result = self.chart_get_response_schema.dump(dash)
             return self.response(200, result=result)
         except ChartNotFoundError:
