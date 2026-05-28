@@ -285,6 +285,12 @@ class ChartRestApi(BaseSupersetModelRestApi):
               type: string
             name: id_or_uuid
             description: Either the id of the chart, or its uuid
+          - in: query
+            name: force_refresh
+            schema:
+              type: boolean
+              default: false
+            description: Force refresh the chart cache by setting cache_timeout to 0
           responses:
             200:
               description: Chart
@@ -308,9 +314,9 @@ class ChartRestApi(BaseSupersetModelRestApi):
         force_refresh = request.args.get("force_refresh", "false").lower() == "true"
         try:
             dash = ChartDAO.get_by_id_or_uuid(id_or_uuid)
-            if force_refresh:
-                dash.cache_timeout = 0
             result = self.chart_get_response_schema.dump(dash)
+            if force_refresh:
+                result["cache_timeout"] = 0
             return self.response(200, result=result)
         except ChartNotFoundError:
             return self.response_404()
